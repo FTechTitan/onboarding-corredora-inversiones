@@ -75,8 +75,67 @@ export interface InversionistaCalificado {
   certificacionProfesional?: boolean;
 }
 
+export interface CorporateInfo {
+  razonSocial: string;
+  rutEmpresa: string;
+  giroComercial: string;
+  fechaConstitucion: string;
+  capitalSocial: string;
+  direccionComercial: string;
+  comuna: string;
+  ciudad: string;
+  telefono: string;
+  email: string;
+  sitioWeb?: string;
+  numeroEmpleados: string;
+  industria: string;
+}
+
+export interface RepresentanteLegal {
+  nombre: string;
+  apellidos: string;
+  rut: string;
+  cargo: string;
+  email: string;
+  telefono: string;
+  poderes: string;
+  fechaNombramiento: string;
+}
+
+export interface Accionista {
+  nombre: string;
+  rut: string;
+  porcentajeParticipacion: number;
+  nacionalidad: string;
+  esPEP: boolean;
+}
+
+export interface CorporateDetails {
+  representantesLegales: RepresentanteLegal[];
+  accionistas: Accionista[];
+  estructuraCorporativa: string;
+  documentosConstitucion: boolean;
+  estatutosSociales: boolean;
+  poderes: boolean;
+}
+
+export interface ElectronicSignature {
+  signatureData: string; // Base64 del canvas
+  timestamp: string;
+  ipAddress: string;
+  deviceInfo: string;
+  certificateId: string;
+  biometricData?: {
+    speed: number;
+    pressure: number;
+    duration: number;
+  };
+}
+
 export interface OnboardingData {
   personalInfo?: PersonalInfo;
+  corporateInfo?: CorporateInfo;
+  corporateDetails?: CorporateDetails;
   pep?: PEPDeclaration;
   beneficiariosFinales?: BeneficiarioFinal[];
   origenFondos?: OrigenFondos;
@@ -84,6 +143,8 @@ export interface OnboardingData {
   crs?: CRSDeclaration;
   perfilInversionista?: PerfilInversionista;
   inversionistaCalificado?: InversionistaCalificado;
+  signature?: ElectronicSignature;
   currentStep: number;
   completedSteps: number[];
+  isCorporate?: boolean;
 }

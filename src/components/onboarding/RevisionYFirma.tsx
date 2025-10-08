@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
-import { OnboardingData } from "@/types/onboarding";
+import { OnboardingData, ElectronicSignature } from "@/types/onboarding";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, CheckCircle2, User, Shield, DollarSign, Globe, TrendingUp, Crown } from "lucide-react";
+import { FileText, CheckCircle2, User, Shield, DollarSign, Globe, TrendingUp, Crown, Building2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
+import AdvancedElectronicSignature from "./AdvancedElectronicSignature";
 
 interface RevisionYFirmaProps {
   data: OnboardingData;
@@ -17,84 +16,156 @@ interface RevisionYFirmaProps {
 const RevisionYFirma = ({ data, onBack }: RevisionYFirmaProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [firma, setFirma] = useState("");
   const [aceptaTerminos, setAceptaTerminos] = useState(false);
   const [firmando, setFirmando] = useState(false);
+  const [signatureCompleted, setSignatureCompleted] = useState(false);
+  const [signatureData, setSignatureData] = useState<ElectronicSignature | null>(null);
+
+  const handleSignatureComplete = (signature: ElectronicSignature) => {
+    setSignatureData(signature);
+    setSignatureCompleted(true);
+  };
 
   const handleFirmar = async () => {
-    if (!firma || !aceptaTerminos) {
+    if (!signatureCompleted) {
       toast({
-        title: "Campos requeridos",
-        description: "Debe ingresar su firma y aceptar los términos",
-        variant: "destructive",
+        title: "Advertencia",
+        description: "No has completado la firma electrónica, pero puedes continuar",
       });
-      return;
+    }
+
+    if (!aceptaTerminos) {
+      toast({
+        title: "Advertencia",
+        description: "No has aceptado los términos, pero puedes continuar",
+      });
     }
 
     setFirmando(true);
     
-    // Simular proceso de firma
+    // Simular proceso de firma y envío
     setTimeout(() => {
       toast({
         title: "¡Proceso completado exitosamente!",
-        description: "Sus documentos han sido firmados correctamente",
+        description: "Has completado el flujo de onboarding",
       });
       navigate("/success");
-    }, 2000);
+    }, 1000);
   };
 
-  const sections = [
-    {
-      icon: User,
-      title: "Información Personal",
-      items: [
-        data.personalInfo?.nombre,
-        data.personalInfo?.rut,
-        data.personalInfo?.email,
-      ].filter(Boolean),
-    },
-    {
-      icon: Shield,
-      title: "Declaración PEP",
-      items: [
-        data.pep?.esPEP ? "Es PEP" : "No es PEP",
-        data.pep?.relacionPEP ? "Tiene relación con PEP" : "Sin relación PEP",
-      ],
-    },
-    {
-      icon: DollarSign,
-      title: "Origen de Fondos",
-      items: [
-        data.origenFondos?.origenPrincipal ? `Origen: ${data.origenFondos.origenPrincipal}` : null,
-        data.origenFondos?.montoEstimado,
-      ].filter(Boolean),
-    },
-    {
-      icon: Globe,
-      title: "FATCA / CRS",
-      items: [
-        data.fatca?.esUSPerson ? "US Person: Sí" : "US Person: No",
-        data.crs?.residenciaFiscal ? `Residencia: ${data.crs.residenciaFiscal}` : null,
-      ].filter(Boolean),
-    },
-    {
-      icon: TrendingUp,
-      title: "Perfil Inversionista",
-      items: [
-        data.perfilInversionista?.objetivoInversion,
-        data.perfilInversionista?.toleranciaRiesgo,
-      ].filter(Boolean),
-    },
-    {
-      icon: Crown,
-      title: "Clasificación",
-      items: [
-        data.inversionistaCalificado?.solicitaClasificacion
-          ? `Inversionista ${data.inversionistaCalificado.tipoCalificacion}`
-          : "Inversionista General",
-      ],
-    },
-  ];
+  const getSignerName = () => {
+    if (data.isCorporate && data.corporateInfo) {
+      return data.corporateInfo.razonSocial;
+    }
+    if (data.personalInfo) {
+      return `${data.personalInfo.nombre} ${data.personalInfo.apellidoPaterno} ${data.personalInfo.apellidoMaterno}`.trim();
+    }
+    return "Firmante";
+  };
+
+  const sections = data.isCorporate
+    ? [
+        {
+          icon: Building2,
+          title: "Información Corporativa",
+          items: [
+            data.corporateInfo?.razonSocial,
+            data.corporateInfo?.rutEmpresa,
+            data.corporateInfo?.email,
+            data.corporateInfo?.giroComercial,
+          ].filter(Boolean),
+        },
+        {
+          icon: User,
+          title: "Representantes Legales",
+          items: data.corporateDetails?.representantesLegales.map(
+            (rep) => `${rep.nombre} ${rep.apellidos} - ${rep.cargo}`
+          ) || [],
+        },
+        {
+          icon: Shield,
+          title: "Accionistas",
+          items: data.corporateDetails?.accionistas.map(
+            (acc) => `${acc.nombre} - ${acc.porcentajeParticipacion}%`
+          ) || [],
+        },
+        {
+          icon: DollarSign,
+          title: "Origen de Fondos",
+          items: [
+            data.origenFondos?.origenPrincipal ? `Origen: ${data.origenFondos.origenPrincipal}` : null,
+            data.origenFondos?.montoEstimado,
+          ].filter(Boolean),
+        },
+        {
+          icon: Globe,
+          title: "FATCA / CRS",
+          items: [
+            data.fatca?.esUSPerson ? "US Person: Sí" : "US Person: No",
+            data.crs?.residenciaFiscal ? `Residencia: ${data.crs.residenciaFiscal}` : null,
+          ].filter(Boolean),
+        },
+        {
+          icon: TrendingUp,
+          title: "Perfil Inversionista",
+          items: [
+            data.perfilInversionista?.objetivoInversion,
+            data.perfilInversionista?.toleranciaRiesgo,
+          ].filter(Boolean),
+        },
+      ]
+    : [
+        {
+          icon: User,
+          title: "Información Personal",
+          items: [
+            data.personalInfo?.nombre,
+            data.personalInfo?.rut,
+            data.personalInfo?.email,
+          ].filter(Boolean),
+        },
+        {
+          icon: Shield,
+          title: "Declaración PEP",
+          items: [
+            data.pep?.esPEP ? "Es PEP" : "No es PEP",
+            data.pep?.relacionPEP ? "Tiene relación con PEP" : "Sin relación PEP",
+          ],
+        },
+        {
+          icon: DollarSign,
+          title: "Origen de Fondos",
+          items: [
+            data.origenFondos?.origenPrincipal ? `Origen: ${data.origenFondos.origenPrincipal}` : null,
+            data.origenFondos?.montoEstimado,
+          ].filter(Boolean),
+        },
+        {
+          icon: Globe,
+          title: "FATCA / CRS",
+          items: [
+            data.fatca?.esUSPerson ? "US Person: Sí" : "US Person: No",
+            data.crs?.residenciaFiscal ? `Residencia: ${data.crs.residenciaFiscal}` : null,
+          ].filter(Boolean),
+        },
+        {
+          icon: TrendingUp,
+          title: "Perfil Inversionista",
+          items: [
+            data.perfilInversionista?.objetivoInversion,
+            data.perfilInversionista?.toleranciaRiesgo,
+          ].filter(Boolean),
+        },
+        {
+          icon: Crown,
+          title: "Clasificación",
+          items: [
+            data.inversionistaCalificado?.solicitaClasificacion
+              ? `Inversionista ${data.inversionistaCalificado.tipoCalificacion}`
+              : "Inversionista General",
+          ],
+        },
+      ];
 
   return (
     <div className="space-y-6">
@@ -124,30 +195,20 @@ const RevisionYFirma = ({ data, onBack }: RevisionYFirmaProps) => {
         })}
       </div>
 
-      <div className="mt-8 p-6 border-2 border-primary/50 rounded-lg bg-gradient-card">
+      <div className="mt-8">
+        <AdvancedElectronicSignature
+          onSignatureComplete={handleSignatureComplete}
+          signerName={getSignerName()}
+        />
+      </div>
+
+      <div className="mt-6 p-6 border-2 border-primary/50 rounded-lg bg-gradient-card">
         <div className="flex items-center gap-3 mb-6">
           <FileText className="w-6 h-6 text-primary" />
-          <h3 className="text-xl font-semibold">Firma Electrónica</h3>
+          <h3 className="text-xl font-semibold">Términos y Condiciones</h3>
         </div>
 
         <div className="space-y-6">
-          <div>
-            <Label htmlFor="firma" className="text-base font-medium">
-              Ingrese su nombre completo como firma
-            </Label>
-            <Input
-              id="firma"
-              value={firma}
-              onChange={(e) => setFirma(e.target.value)}
-              placeholder="Nombre Completo"
-              className="mt-2 text-lg font-serif italic"
-              style={{ fontFamily: "Brush Script MT, cursive" }}
-            />
-            <p className="text-xs text-muted-foreground mt-2">
-              Al ingresar su nombre, está creando su firma electrónica con validez legal
-            </p>
-          </div>
-
           <div className="flex items-start space-x-3 p-4 rounded-lg border border-border bg-background">
             <Checkbox
               id="terminos"
@@ -160,21 +221,26 @@ const RevisionYFirma = ({ data, onBack }: RevisionYFirmaProps) => {
                 términos y condiciones
               </a>
               . Declaro que toda la información proporcionada es veraz y completa. Comprendo que esta
-              firma electrónica tiene plena validez legal.
+              firma electrónica avanzada tiene plena validez legal conforme a la Ley N° 19.799.
             </label>
           </div>
 
           <div className="pt-4 border-t border-border">
-            <p className="text-xs text-muted-foreground mb-4">
-              🔒 Este documento será firmado electrónicamente con certificado digital
-            </p>
+            {signatureData && (
+              <div className="mb-4 p-3 rounded-lg bg-primary/10 border border-primary/20">
+                <p className="text-sm text-primary flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4" />
+                  Firma electrónica capturada - Certificado: {signatureData.certificateId}
+                </p>
+              </div>
+            )}
             <Button
               size="lg"
               onClick={handleFirmar}
-              disabled={!firma || !aceptaTerminos || firmando}
+              disabled={firmando}
               className="w-full md:w-auto min-w-[200px] text-lg py-6 shadow-glow"
             >
-              {firmando ? "Firmando..." : "Firmar y Activar Cuenta"}
+              {firmando ? "Procesando..." : "Activar Cuenta"}
             </Button>
           </div>
         </div>

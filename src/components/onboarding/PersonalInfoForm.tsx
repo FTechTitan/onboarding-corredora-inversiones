@@ -41,32 +41,26 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validaciones opcionales - solo si hay datos ingresados
+    // Validaciones opcionales - solo advertencias
     if (formData.rut && !validateRUT(formData.rut)) {
       toast({
-        title: "RUT inválido",
-        description: "Por favor, ingrese un RUT válido",
-        variant: "destructive",
+        title: "Advertencia",
+        description: "El RUT ingresado podría no ser válido",
       });
-      return;
     }
 
     if (formData.email && !validateEmail(formData.email)) {
       toast({
-        title: "Email inválido",
-        description: "Por favor, ingrese un email válido",
-        variant: "destructive",
+        title: "Advertencia",
+        description: "El email ingresado podría no ser válido",
       });
-      return;
     }
 
     if (formData.telefono && !validatePhone(formData.telefono)) {
       toast({
-        title: "Teléfono inválido",
-        description: "Por favor, ingrese un teléfono válido (ej: 912345678)",
-        variant: "destructive",
+        title: "Advertencia",
+        description: "El teléfono ingresado podría no ser válido",
       });
-      return;
     }
 
     onNext(formData);

@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Shield, FileCheck, Clock, Lock, CheckCircle2, ArrowRight } from "lucide-react";
+import { Shield, FileCheck, Clock, Lock, CheckCircle2, ArrowRight, Building2, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Index = () => {
@@ -63,17 +63,31 @@ const Index = () => {
               segura y en cumplimiento con todas las normativas financieras chilenas
             </p>
             
-            <Button
-              size="lg"
-              onClick={() => navigate("/onboarding")}
-              className="text-lg px-8 py-6 shadow-glow hover:shadow-xl transition-all duration-300"
-            >
-              Iniciar Proceso
-              <ArrowRight className="ml-2 w-5 h-5" />
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button
+                size="lg"
+                onClick={() => navigate("/onboarding")}
+                className="text-lg px-8 py-6 shadow-glow hover:shadow-xl transition-all duration-300 min-w-[240px]"
+              >
+                <User className="mr-2 w-5 h-5" />
+                Cliente Personal
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => navigate("/corporate-pre-enrollment")}
+                className="text-lg px-8 py-6 border-primary/50 hover:bg-primary/10 transition-all duration-300 min-w-[240px]"
+              >
+                <Building2 className="mr-2 w-5 h-5" />
+                Cliente Empresarial
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </div>
 
             <p className="mt-4 text-sm text-muted-foreground">
-              ⏱️ Tiempo estimado: 10-15 minutos
+              ⏱️ Tiempo estimado: 10-15 minutos (Personal) | 15-20 minutos (Empresarial)
             </p>
           </div>
         </div>
@@ -82,7 +96,10 @@ const Index = () => {
       {/* Features Grid */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">¿Por qué nuestro sistema?</h2>
+          <h2 className="text-3xl font-bold text-center mb-4">¿Por qué nuestro sistema?</h2>
+          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
+            Solución integral para personas naturales y empresas
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {features.map((feature, index) => (
               <Card
@@ -98,6 +115,93 @@ const Index = () => {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Client Types Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-secondary/10">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">Tipos de Cliente</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <Card className="border-primary/30 bg-gradient-card hover:border-primary/50 transition-all duration-300">
+              <CardContent className="pt-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <User className="w-7 h-7 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-bold">Cliente Personal</h3>
+                </div>
+                <p className="text-muted-foreground mb-6">
+                  Proceso optimizado para personas naturales que desean invertir de forma individual.
+                </p>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                    <span>Formulario simplificado con datos personales</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                    <span>Declaración PEP y origen de fondos</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                    <span>Perfil de inversionista personalizado</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                    <span>Firma electrónica avanzada</span>
+                  </li>
+                </ul>
+                <Button
+                  onClick={() => navigate("/onboarding")}
+                  className="w-full shadow-glow"
+                >
+                  Comenzar como Personal
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="border-primary/30 bg-gradient-card hover:border-primary/50 transition-all duration-300">
+              <CardContent className="pt-8">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center">
+                    <Building2 className="w-7 h-7 text-primary" />
+                  </div>
+                  <h3 className="text-2xl font-bold">Cliente Empresarial</h3>
+                </div>
+                <p className="text-muted-foreground mb-6">
+                  Solución completa para empresas y personas jurídicas con gestión de múltiples representantes.
+                </p>
+                <ul className="space-y-3 mb-6">
+                  <li className="flex items-start gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                    <span>Pre-enrolamiento con datos corporativos</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                    <span>Gestión de representantes legales y accionistas</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                    <span>Declaración de beneficiarios finales</span>
+                  </li>
+                  <li className="flex items-start gap-2 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 flex-shrink-0" />
+                    <span>Firma electrónica avanzada con certificado digital</span>
+                  </li>
+                </ul>
+                <Button
+                  variant="outline"
+                  onClick={() => navigate("/corporate-pre-enrollment")}
+                  className="w-full border-primary/50 hover:bg-primary/10"
+                >
+                  Comenzar como Empresa
+                  <ArrowRight className="ml-2 w-4 h-4" />
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
