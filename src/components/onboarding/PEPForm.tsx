@@ -72,7 +72,6 @@ const PEPForm = ({ data, onNext, onBack }: PEPFormProps) => {
                 value={formData.cargo || ""}
                 onChange={(e) => setFormData({ ...formData, cargo: e.target.value })}
                 placeholder="Ej: Ministro, Alcalde, etc."
-                required={formData.esPEP}
               />
             </div>
 
@@ -83,7 +82,6 @@ const PEPForm = ({ data, onNext, onBack }: PEPFormProps) => {
                 value={formData.institucion || ""}
                 onChange={(e) => setFormData({ ...formData, institucion: e.target.value })}
                 placeholder="Ej: Ministerio de Hacienda, Municipalidad, etc."
-                required={formData.esPEP}
               />
             </div>
 
@@ -94,7 +92,6 @@ const PEPForm = ({ data, onNext, onBack }: PEPFormProps) => {
                 value={formData.periodo || ""}
                 onChange={(e) => setFormData({ ...formData, periodo: e.target.value })}
                 placeholder="Ej: 2018 - 2022"
-                required={formData.esPEP}
               />
             </div>
           </div>
@@ -132,7 +129,6 @@ const PEPForm = ({ data, onNext, onBack }: PEPFormProps) => {
               value={formData.relacionDetalle || ""}
               onChange={(e) => setFormData({ ...formData, relacionDetalle: e.target.value })}
               placeholder="Indique el nombre, parentesco, cargo e institución del familiar PEP"
-              required={formData.relacionPEP}
               rows={4}
             />
           </div>

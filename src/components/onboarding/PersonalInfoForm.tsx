@@ -41,8 +41,8 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validaciones
-    if (!validateRUT(formData.rut)) {
+    // Validaciones opcionales - solo si hay datos ingresados
+    if (formData.rut && !validateRUT(formData.rut)) {
       toast({
         title: "RUT inválido",
         description: "Por favor, ingrese un RUT válido",
@@ -51,7 +51,7 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
       return;
     }
 
-    if (!validateEmail(formData.email)) {
+    if (formData.email && !validateEmail(formData.email)) {
       toast({
         title: "Email inválido",
         description: "Por favor, ingrese un email válido",
@@ -60,7 +60,7 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
       return;
     }
 
-    if (!validatePhone(formData.telefono)) {
+    if (formData.telefono && !validatePhone(formData.telefono)) {
       toast({
         title: "Teléfono inválido",
         description: "Por favor, ingrese un teléfono válido (ej: 912345678)",
@@ -105,7 +105,6 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
             id="nombre"
             value={formData.nombre}
             onChange={(e) => setFormData({ ...formData, nombre: e.target.value })}
-            required
           />
         </div>
 
@@ -117,7 +116,6 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
                 id="apellidoPaterno"
                 value={formData.apellidoPaterno}
                 onChange={(e) => setFormData({ ...formData, apellidoPaterno: e.target.value })}
-                required
               />
             </div>
 
@@ -127,7 +125,6 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
                 id="apellidoMaterno"
                 value={formData.apellidoMaterno}
                 onChange={(e) => setFormData({ ...formData, apellidoMaterno: e.target.value })}
-                required
               />
             </div>
           </>
@@ -140,7 +137,6 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
             value={formData.rut}
             onChange={(e) => handleRUTChange(e.target.value)}
             placeholder="12.345.678-9"
-            required
           />
         </div>
 
@@ -151,7 +147,6 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
             type="email"
             value={formData.email}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-            required
           />
         </div>
 
@@ -162,7 +157,6 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
             value={formData.telefono}
             onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
             placeholder="912345678"
-            required
           />
         </div>
 
@@ -174,7 +168,6 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
               type="date"
               value={formData.fechaNacimiento}
               onChange={(e) => setFormData({ ...formData, fechaNacimiento: e.target.value })}
-              required
             />
           </div>
         )}
@@ -185,7 +178,6 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
             id="nacionalidad"
             value={formData.nacionalidad}
             onChange={(e) => setFormData({ ...formData, nacionalidad: e.target.value })}
-            required
           />
         </div>
 
@@ -195,7 +187,6 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
             id="direccion"
             value={formData.direccion}
             onChange={(e) => setFormData({ ...formData, direccion: e.target.value })}
-            required
           />
         </div>
 
@@ -205,7 +196,6 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
             id="comuna"
             value={formData.comuna}
             onChange={(e) => setFormData({ ...formData, comuna: e.target.value })}
-            required
           />
         </div>
 
@@ -215,7 +205,6 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
             id="ciudad"
             value={formData.ciudad}
             onChange={(e) => setFormData({ ...formData, ciudad: e.target.value })}
-            required
           />
         </div>
 
@@ -227,7 +216,6 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
             id="profesion"
             value={formData.profesion}
             onChange={(e) => setFormData({ ...formData, profesion: e.target.value })}
-            required
           />
         </div>
 
@@ -237,7 +225,6 @@ const PersonalInfoForm = ({ data, onNext }: PersonalInfoFormProps) => {
             id="actividadEconomica"
             value={formData.actividadEconomica}
             onChange={(e) => setFormData({ ...formData, actividadEconomica: e.target.value })}
-            required
           />
         </div>
       </div>
