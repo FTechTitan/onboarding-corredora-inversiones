@@ -15,18 +15,18 @@ interface DocumentosRespaldoFormProps {
 
 const documentosRequeridos = {
   natural: [
-    { id: "cedula", nombre: "Cédula de Identidad (ambos lados)", requerido: true },
-    { id: "comprobante-domicilio", nombre: "Comprobante de domicilio (reciente)", requerido: true },
+    { id: "cedula", nombre: "Cédula de Identidad (ambos lados)", requerido: false },
+    { id: "comprobante-domicilio", nombre: "Comprobante de domicilio (reciente)", requerido: false },
     { id: "declaracion-impuestos", nombre: "Declaración de impuestos", requerido: false },
-    { id: "certificado-laboral", nombre: "Certificado laboral o comercial", requerido: true },
+    { id: "certificado-laboral", nombre: "Certificado laboral o comercial", requerido: false },
   ],
   corporativo: [
-    { id: "escritura", nombre: "Escritura de constitución", requerido: true },
-    { id: "rut", nombre: "RUT de la empresa", requerido: true },
-    { id: "estatutos", nombre: "Estatutos sociales vigentes", requerido: true },
-    { id: "poderes", nombre: "Poderes de representación", requerido: true },
-    { id: "composicion-accionaria", nombre: "Composición accionaria", requerido: true },
-    { id: "cedulas-accionistas", nombre: "Cédulas de accionistas mayoritarios", requerido: true },
+    { id: "escritura", nombre: "Escritura de constitución", requerido: false },
+    { id: "rut", nombre: "RUT de la empresa", requerido: false },
+    { id: "estatutos", nombre: "Estatutos sociales vigentes", requerido: false },
+    { id: "poderes", nombre: "Poderes de representación", requerido: false },
+    { id: "composicion-accionaria", nombre: "Composición accionaria", requerido: false },
+    { id: "cedulas-accionistas", nombre: "Cédulas de accionistas mayoritarios", requerido: false },
     { id: "estados-financieros", nombre: "Estados financieros (últimos 2 años)", requerido: false },
   ],
 };
@@ -126,16 +126,7 @@ const DocumentosRespaldoForm = ({ data, onNext, onBack, isCorporate = false }: D
   };
 
   const handleSubmit = () => {
-    const requeridos = documentosLista.filter(d => d.requerido);
-    if (documentos.length < requeridos.length) {
-      toast({
-        title: "Documentos faltantes",
-        description: `Debes subir al menos ${requeridos.length} documentos requeridos`,
-        variant: "destructive",
-      });
-      return;
-    }
-
+    // Permitir continuar sin documentos (todos son opcionales)
     onNext({ documentos });
   };
 
@@ -146,21 +137,18 @@ const DocumentosRespaldoForm = ({ data, onNext, onBack, isCorporate = false }: D
         <CardContent className="pt-6">
           <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
             <AlertCircle className="w-5 h-5 text-primary" />
-            Documentos {isCorporate ? "Corporativos" : "Requeridos"}
+            Documentos {isCorporate ? "Corporativos" : "Sugeridos"} (Opcionales)
           </h3>
           <ul className="space-y-2">
             {documentosLista.map((doc) => (
               <li key={doc.id} className="flex items-center gap-2 text-sm">
                 <CheckCircle2 className="w-4 h-4 text-primary flex-shrink-0" />
-                <span>
-                  {doc.nombre}
-                  {doc.requerido && <span className="text-destructive ml-1">*</span>}
-                </span>
+                <span>{doc.nombre}</span>
               </li>
             ))}
           </ul>
           <p className="text-xs text-muted-foreground mt-4">
-            * Documentos obligatorios. Formatos aceptados: PDF, JPG, PNG (máx. 10MB cada uno)
+            Los documentos son opcionales pero recomendados para agilizar el proceso. Formatos aceptados: PDF, JPG, PNG (máx. 10MB cada uno)
           </p>
         </CardContent>
       </Card>
@@ -243,7 +231,6 @@ const DocumentosRespaldoForm = ({ data, onNext, onBack, isCorporate = false }: D
           type="button"
           size="lg"
           onClick={handleSubmit}
-          disabled={documentos.length === 0}
           className="min-w-[150px]"
         >
           Continuar

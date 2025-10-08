@@ -159,6 +159,7 @@ export interface OnboardingData {
   inversionistaCalificado?: InversionistaCalificado;
   documentos?: DocumentosRespaldo;
   signature?: ElectronicSignature;
+  firma?: ElectronicSignature;
   estadoFinal?: EstadoOnboarding;
   currentStep: number;
   completedSteps: number[];
