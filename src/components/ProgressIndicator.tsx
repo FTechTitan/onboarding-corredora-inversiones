@@ -11,9 +11,11 @@ interface ProgressIndicatorProps {
   steps: Step[];
   currentStep: number;
   completedSteps: number[];
+  hideLastStepNumber?: boolean;
 }
 
-const ProgressIndicator = ({ steps, currentStep, completedSteps }: ProgressIndicatorProps) => {
+const ProgressIndicator = ({ steps, currentStep, completedSteps, hideLastStepNumber = false }: ProgressIndicatorProps) => {
+  const isLastStep = (index: number) => index === steps.length - 1;
   return (
     <div className="w-full py-8">
       <div className="flex items-center justify-between">
@@ -32,6 +34,8 @@ const ProgressIndicator = ({ steps, currentStep, completedSteps }: ProgressIndic
               >
                 {completedSteps.includes(step.id) ? (
                   <Check className="w-6 h-6" />
+                ) : hideLastStepNumber && isLastStep(index) ? (
+                  <Check className="w-6 h-6 opacity-30" />
                 ) : (
                   <span className="text-sm font-semibold">{step.id}</span>
                 )}

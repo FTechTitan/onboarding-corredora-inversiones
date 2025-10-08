@@ -28,12 +28,13 @@ const steps = [
 
 const naturalSteps = [
   { id: 1, title: "Información Personal", description: "Datos básicos del cliente" },
-  { id: 2, title: "Declaración PEP + Origen de Fondos", description: "Declaraciones y procedencia" },
-  { id: 3, title: "Declaraciones FATCA/CRS", description: "Obligaciones fiscales internacionales" },
-  { id: 4, title: "Perfil de Inversión", description: "Objetivos y clasificación" },
-  { id: 5, title: "Documentos de Respaldo", description: "Carga de documentación" },
-  { id: 6, title: "Revisión y Firma", description: "Confirmar y firmar" },
-  { id: 7, title: "Resultado Final", description: "Estado de la solicitud" },
+  { id: 2, title: "Declaración PEP", description: "Personas políticamente expuestas" },
+  { id: 3, title: "Origen de Fondos", description: "Procedencia de recursos" },
+  { id: 4, title: "Declaraciones FATCA/CRS", description: "Obligaciones fiscales internacionales" },
+  { id: 5, title: "Perfil de Inversión", description: "Objetivos y clasificación" },
+  { id: 6, title: "Documentos de Respaldo", description: "Carga de documentación" },
+  { id: 7, title: "Revisión y Firma", description: "Confirmar y firmar" },
+  { id: 8, title: "Revisión Final", description: "Estado de la solicitud" },
 ];
 
 const Onboarding = () => {
@@ -89,30 +90,33 @@ const Onboarding = () => {
           break;
       }
     } else {
-      // Flujo natural (7 pasos)
+      // Flujo natural (8 pasos)
       switch (data.currentStep) {
         case 1:
           updatedData.personalInfo = stepData;
           break;
         case 2:
-          // Paso combinado: PEP + Origen de Fondos
-          if (stepData.pep) updatedData.pep = stepData.pep;
-          if (stepData.origenFondos) updatedData.origenFondos = stepData.origenFondos;
+          // Declaración PEP
+          updatedData.pep = stepData;
           break;
         case 3:
+          // Origen de Fondos
+          updatedData.origenFondos = stepData;
+          break;
+        case 4:
           // FATCA/CRS
           if (stepData.fatca) updatedData.fatca = stepData.fatca;
           if (stepData.crs) updatedData.crs = stepData.crs;
           break;
-        case 4:
+        case 5:
           // Paso combinado: Perfil + Inversionista Calificado
           if (stepData.perfilInversionista) updatedData.perfilInversionista = stepData.perfilInversionista;
           if (stepData.inversionistaCalificado) updatedData.inversionistaCalificado = stepData.inversionistaCalificado;
           break;
-        case 5:
+        case 6:
           updatedData.documentos = stepData;
           break;
-        case 6:
+        case 7:
           // Revisión y Firma - guardar firma y estado final
           if (stepData.firma) updatedData.firma = stepData.firma;
           if (stepData.estadoFinal) updatedData.estadoFinal = stepData.estadoFinal;
@@ -164,22 +168,24 @@ const Onboarding = () => {
           );
       }
     } else {
-      // Flujo natural (7 pasos)
+      // Flujo natural (8 pasos)
       switch (data.currentStep) {
         case 1:
           return <PersonalInfoForm data={data.personalInfo} onNext={handleNext} />;
         case 2:
-          return <PEPYOrigenFondosForm pepData={data.pep} origenData={data.origenFondos} onNext={handleNext} onBack={handleBack} />;
+          return <PEPForm data={data.pep} onNext={handleNext} onBack={handleBack} />;
         case 3:
-          return <FATCACRSForm fatcaData={data.fatca} crsData={data.crs} onNext={(fatca, crs) => handleNext({ fatca, crs })} onBack={handleBack} />;
+          return <OrigenFondosForm data={data.origenFondos} onNext={handleNext} onBack={handleBack} />;
         case 4:
+          return <FATCACRSForm fatcaData={data.fatca} crsData={data.crs} onNext={(fatca, crs) => handleNext({ fatca, crs })} onBack={handleBack} />;
+        case 5:
           // Paso combinado: Perfil + Inversionista Calificado (TO-DO: crear componente unificado)
           return <PerfilInversionistaForm data={data.perfilInversionista} onNext={(perfilInversionista) => handleNext({ perfilInversionista })} onBack={handleBack} />;
-        case 5:
-          return <DocumentosRespaldoForm data={data.documentos} onNext={handleNext} onBack={handleBack} isCorporate={false} />;
         case 6:
-          return <RevisionYFirmaForm data={data} onNext={handleNext} onBack={handleBack} />;
+          return <DocumentosRespaldoForm data={data.documentos} onNext={handleNext} onBack={handleBack} isCorporate={false} />;
         case 7:
+          return <RevisionYFirmaForm data={data} onNext={handleNext} onBack={handleBack} />;
+        case 8:
           return (
             <ResultadoOnboarding
               estado={data.estadoFinal || 'pendiente'}
@@ -217,6 +223,7 @@ const Onboarding = () => {
           steps={activeSteps}
           currentStep={data.currentStep}
           completedSteps={data.completedSteps}
+          hideLastStepNumber={true}
         />
 
         {/* Main Card */}
@@ -226,12 +233,13 @@ const Onboarding = () => {
               {data.currentStep === 1 && <UserCheck className="w-6 h-6 text-primary" />}
               {data.isCorporate && data.currentStep === 2 && <Building2 className="w-6 h-6 text-primary" />}
               {!data.isCorporate && data.currentStep === 2 && <Shield className="w-6 h-6 text-primary" />}
-              {!data.isCorporate && data.currentStep === 3 && <Globe className="w-6 h-6 text-primary" />}
+              {!data.isCorporate && data.currentStep === 3 && <DollarSign className="w-6 h-6 text-primary" />}
+              {!data.isCorporate && data.currentStep === 4 && <Globe className="w-6 h-6 text-primary" />}
               {data.isCorporate && data.currentStep === 3 && <FileCheck className="w-6 h-6 text-primary" />}
-              {((!data.isCorporate && data.currentStep === 4) || (data.isCorporate && data.currentStep === 4)) && <TrendingUp className="w-6 h-6 text-primary" />}
-              {((!data.isCorporate && data.currentStep === 5) || (data.isCorporate && data.currentStep === 5)) && <Upload className="w-6 h-6 text-primary" />}
-              {((!data.isCorporate && data.currentStep === 6) || (data.isCorporate && data.currentStep === 6)) && <FileSignature className="w-6 h-6 text-primary" />}
-              {((!data.isCorporate && data.currentStep === 7) || (data.isCorporate && data.currentStep === 7)) && <CheckCircle className="w-6 h-6 text-primary" />}
+              {((!data.isCorporate && data.currentStep === 5) || (data.isCorporate && data.currentStep === 4)) && <TrendingUp className="w-6 h-6 text-primary" />}
+              {((!data.isCorporate && data.currentStep === 6) || (data.isCorporate && data.currentStep === 5)) && <Upload className="w-6 h-6 text-primary" />}
+              {((!data.isCorporate && data.currentStep === 7) || (data.isCorporate && data.currentStep === 6)) && <FileSignature className="w-6 h-6 text-primary" />}
+              {((!data.isCorporate && data.currentStep === 8) || (data.isCorporate && data.currentStep === 7)) && <CheckCircle className="w-6 h-6 text-primary" />}
               <div>
                 <CardTitle className="text-2xl">{activeSteps[data.currentStep - 1]?.title}</CardTitle>
                 <CardDescription className="text-base mt-1">
