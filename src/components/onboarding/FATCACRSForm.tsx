@@ -87,15 +87,15 @@ const FATCACRSForm = ({ fatcaData, crsData, onNext, onBack }: FATCACRSFormProps)
               type="button"
               onClick={() => handleFatcaResponse(false)}
               className={cn(
-                "p-6 rounded-lg border-2 transition-all duration-300 hover:scale-105",
+                "p-4 rounded-lg border-2 transition-all duration-300 hover:scale-105",
                 !fatca.esUSPerson
                   ? "border-primary bg-primary/10 shadow-glow"
                   : "border-border bg-card hover:border-primary/50"
               )}
             >
               <div className="text-center">
-                <div className="text-3xl mb-2">🚫</div>
-                <span className={cn("text-base font-semibold", !fatca.esUSPerson && "text-primary")}>
+                <div className="text-2xl mb-1">🚫</div>
+                <span className={cn("text-sm font-semibold", !fatca.esUSPerson && "text-primary")}>
                   No
                 </span>
               </div>
@@ -105,15 +105,15 @@ const FATCACRSForm = ({ fatcaData, crsData, onNext, onBack }: FATCACRSFormProps)
               type="button"
               onClick={() => handleFatcaResponse(true)}
               className={cn(
-                "p-6 rounded-lg border-2 transition-all duration-300 hover:scale-105",
+                "p-4 rounded-lg border-2 transition-all duration-300 hover:scale-105",
                 fatca.esUSPerson
                   ? "border-primary bg-primary/10 shadow-glow"
                   : "border-border bg-card hover:border-primary/50"
               )}
             >
               <div className="text-center">
-                <div className="text-3xl mb-2">✓</div>
-                <span className={cn("text-base font-semibold", fatca.esUSPerson && "text-primary")}>
+                <div className="text-2xl mb-1">✓</div>
+                <span className={cn("text-sm font-semibold", fatca.esUSPerson && "text-primary")}>
                   Sí
                 </span>
               </div>
