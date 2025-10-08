@@ -3,8 +3,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import ProgressIndicator from "@/components/ProgressIndicator";
 import PersonalInfoForm from "@/components/onboarding/PersonalInfoForm";
 import PEPForm from "@/components/onboarding/PEPForm";
+import OrigenFondosForm from "@/components/onboarding/OrigenFondosForm";
+import FATCACRSForm from "@/components/onboarding/FATCACRSForm";
+import PerfilInversionistaForm from "@/components/onboarding/PerfilInversionistaForm";
+import InversionistaCalificadoForm from "@/components/onboarding/InversionistaCalificadoForm";
+import RevisionYFirma from "@/components/onboarding/RevisionYFirma";
 import { OnboardingData } from "@/types/onboarding";
-import { Shield, FileCheck, UserCheck } from "lucide-react";
+import { Shield, FileCheck, UserCheck, DollarSign, Globe, TrendingUp, Crown, FileSignature } from "lucide-react";
 
 const steps = [
   { id: 1, title: "Información Personal", description: "Datos básicos del cliente" },
@@ -12,7 +17,8 @@ const steps = [
   { id: 3, title: "Origen de Fondos", description: "Procedencia de recursos" },
   { id: 4, title: "FATCA / CRS", description: "Declaraciones fiscales" },
   { id: 5, title: "Perfil Inversionista", description: "Evaluación de riesgo" },
-  { id: 6, title: "Revisión y Firma", description: "Firma electrónica" },
+  { id: 6, title: "Inversionista Calificado", description: "Clasificación especial" },
+  { id: 7, title: "Revisión y Firma", description: "Firma electrónica" },
 ];
 
 const Onboarding = () => {
@@ -36,7 +42,19 @@ const Onboarding = () => {
       case 2:
         updatedData.pep = stepData;
         break;
-      // Agregar más casos según sea necesario
+      case 3:
+        updatedData.origenFondos = stepData;
+        break;
+      case 4:
+        updatedData.fatca = stepData.fatca;
+        updatedData.crs = stepData.crs;
+        break;
+      case 5:
+        updatedData.perfilInversionista = stepData;
+        break;
+      case 6:
+        updatedData.inversionistaCalificado = stepData;
+        break;
     }
 
     setData(updatedData);
@@ -55,12 +73,39 @@ const Onboarding = () => {
         return <PersonalInfoForm data={data.personalInfo} onNext={handleNext} />;
       case 2:
         return <PEPForm data={data.pep} onNext={handleNext} onBack={handleBack} />;
+      case 3:
+        return <OrigenFondosForm data={data.origenFondos} onNext={handleNext} onBack={handleBack} />;
+      case 4:
+        return (
+          <FATCACRSForm
+            fatcaData={data.fatca}
+            crsData={data.crs}
+            onNext={(fatca, crs) => handleNext({ fatca, crs })}
+            onBack={handleBack}
+          />
+        );
+      case 5:
+        return (
+          <PerfilInversionistaForm
+            data={data.perfilInversionista}
+            onNext={handleNext}
+            onBack={handleBack}
+          />
+        );
+      case 6:
+        return (
+          <InversionistaCalificadoForm
+            data={data.inversionistaCalificado}
+            onNext={handleNext}
+            onBack={handleBack}
+          />
+        );
+      case 7:
+        return <RevisionYFirma data={data} onBack={handleBack} />;
       default:
         return (
           <div className="text-center py-12">
-            <p className="text-muted-foreground">
-              Paso {data.currentStep} - En desarrollo
-            </p>
+            <p className="text-muted-foreground">Paso {data.currentStep} - En desarrollo</p>
           </div>
         );
     }
@@ -94,10 +139,13 @@ const Onboarding = () => {
             <div className="flex items-center gap-3">
               {data.currentStep === 1 && <UserCheck className="w-6 h-6 text-primary" />}
               {data.currentStep === 2 && <FileCheck className="w-6 h-6 text-primary" />}
+              {data.currentStep === 3 && <DollarSign className="w-6 h-6 text-primary" />}
+              {data.currentStep === 4 && <Globe className="w-6 h-6 text-primary" />}
+              {data.currentStep === 5 && <TrendingUp className="w-6 h-6 text-primary" />}
+              {data.currentStep === 6 && <Crown className="w-6 h-6 text-primary" />}
+              {data.currentStep === 7 && <FileSignature className="w-6 h-6 text-primary" />}
               <div>
-                <CardTitle className="text-2xl">
-                  {steps[data.currentStep - 1]?.title}
-                </CardTitle>
+                <CardTitle className="text-2xl">{steps[data.currentStep - 1]?.title}</CardTitle>
                 <CardDescription className="text-base mt-1">
                   {steps[data.currentStep - 1]?.description}
                 </CardDescription>
