@@ -9,29 +9,29 @@ import OrigenFondosForm from "@/components/onboarding/OrigenFondosForm";
 import FATCACRSForm from "@/components/onboarding/FATCACRSForm";
 import PerfilInversionistaForm from "@/components/onboarding/PerfilInversionistaForm";
 import InversionistaCalificadoForm from "@/components/onboarding/InversionistaCalificadoForm";
-import RevisionYFirma from "@/components/onboarding/RevisionYFirma";
-import { OnboardingData, CorporateInfo } from "@/types/onboarding";
-import { Shield, FileCheck, UserCheck, DollarSign, Globe, TrendingUp, Crown, FileSignature, Building2, Users } from "lucide-react";
+import DocumentosRespaldoForm from "@/components/onboarding/DocumentosRespaldoForm";
+import RevisionForm from "@/components/onboarding/RevisionForm";
+import ResultadoOnboarding from "@/components/onboarding/ResultadoOnboarding";
+import { OnboardingData, CorporateInfo, EstadoOnboarding } from "@/types/onboarding";
+import { Shield, FileCheck, UserCheck, DollarSign, Globe, TrendingUp, Upload, FileSignature, Building2, CheckCircle } from "lucide-react";
 
 const steps = [
   { id: 1, title: "Información Personal", description: "Datos básicos del cliente" },
   { id: 2, title: "Información Corporativa", description: "Datos de la empresa" },
-  { id: 3, title: "Declaración PEP", description: "Persona Expuesta Políticamente" },
-  { id: 4, title: "Origen de Fondos", description: "Procedencia de recursos" },
-  { id: 5, title: "FATCA / CRS", description: "Declaraciones fiscales" },
-  { id: 6, title: "Perfil Inversionista", description: "Evaluación de riesgo" },
-  { id: 7, title: "Inversionista Calificado", description: "Clasificación especial" },
-  { id: 8, title: "Revisión y Firma", description: "Firma electrónica" },
+  { id: 3, title: "Declaraciones y Fondos", description: "PEP, Origen y FATCA/CRS" },
+  { id: 4, title: "Perfil de Inversión", description: "Objetivos y clasificación" },
+  { id: 5, title: "Documentos de Respaldo", description: "Carga de documentación" },
+  { id: 6, title: "Revisión Final", description: "Confirmar información" },
+  { id: 7, title: "Resultado", description: "Estado de la solicitud" },
 ];
 
 const naturalSteps = [
   { id: 1, title: "Información Personal", description: "Datos básicos del cliente" },
-  { id: 2, title: "Declaración PEP", description: "Persona Expuesta Políticamente" },
-  { id: 3, title: "Origen de Fondos", description: "Procedencia de recursos" },
-  { id: 4, title: "FATCA / CRS", description: "Declaraciones fiscales" },
-  { id: 5, title: "Perfil Inversionista", description: "Evaluación de riesgo" },
-  { id: 6, title: "Inversionista Calificado", description: "Clasificación especial" },
-  { id: 7, title: "Revisión y Firma", description: "Firma electrónica" },
+  { id: 2, title: "Declaraciones y Fondos", description: "PEP, Origen y FATCA/CRS" },
+  { id: 3, title: "Perfil de Inversión", description: "Objetivos y clasificación" },
+  { id: 4, title: "Documentos de Respaldo", description: "Carga de documentación" },
+  { id: 5, title: "Revisión Final", description: "Confirmar información" },
+  { id: 6, title: "Resultado", description: "Estado de la solicitud" },
 ];
 
 const Onboarding = () => {
@@ -57,7 +57,7 @@ const Onboarding = () => {
 
     // Guardar datos del paso actual
     if (data.isCorporate) {
-      // Flujo corporativo
+      // Flujo corporativo (7 pasos)
       switch (data.currentStep) {
         case 1:
           updatedData.personalInfo = stepData;
@@ -66,43 +66,49 @@ const Onboarding = () => {
           updatedData.corporateDetails = stepData;
           break;
         case 3:
-          updatedData.pep = stepData;
+          // Paso combinado: PEP, Origen, FATCA/CRS
+          if (stepData.pep) updatedData.pep = stepData.pep;
+          if (stepData.origenFondos) updatedData.origenFondos = stepData.origenFondos;
+          if (stepData.fatca) updatedData.fatca = stepData.fatca;
+          if (stepData.crs) updatedData.crs = stepData.crs;
           break;
         case 4:
-          updatedData.origenFondos = stepData;
+          // Paso combinado: Perfil + Inversionista Calificado
+          if (stepData.perfilInversionista) updatedData.perfilInversionista = stepData.perfilInversionista;
+          if (stepData.inversionistaCalificado) updatedData.inversionistaCalificado = stepData.inversionistaCalificado;
           break;
         case 5:
-          updatedData.fatca = stepData.fatca;
-          updatedData.crs = stepData.crs;
+          updatedData.documentos = stepData;
           break;
         case 6:
-          updatedData.perfilInversionista = stepData;
-          break;
-        case 7:
-          updatedData.inversionistaCalificado = stepData;
+          // Revisión - estado final
+          updatedData.estadoFinal = stepData as EstadoOnboarding;
           break;
       }
     } else {
-      // Flujo natural
+      // Flujo natural (6 pasos)
       switch (data.currentStep) {
         case 1:
           updatedData.personalInfo = stepData;
           break;
         case 2:
-          updatedData.pep = stepData;
+          // Paso combinado: PEP, Origen, FATCA/CRS
+          if (stepData.pep) updatedData.pep = stepData.pep;
+          if (stepData.origenFondos) updatedData.origenFondos = stepData.origenFondos;
+          if (stepData.fatca) updatedData.fatca = stepData.fatca;
+          if (stepData.crs) updatedData.crs = stepData.crs;
           break;
         case 3:
-          updatedData.origenFondos = stepData;
+          // Paso combinado: Perfil + Inversionista Calificado
+          if (stepData.perfilInversionista) updatedData.perfilInversionista = stepData.perfilInversionista;
+          if (stepData.inversionistaCalificado) updatedData.inversionistaCalificado = stepData.inversionistaCalificado;
           break;
         case 4:
-          updatedData.fatca = stepData.fatca;
-          updatedData.crs = stepData.crs;
+          updatedData.documentos = stepData;
           break;
         case 5:
-          updatedData.perfilInversionista = stepData;
-          break;
-        case 6:
-          updatedData.inversionistaCalificado = stepData;
+          // Revisión - estado final
+          updatedData.estadoFinal = stepData as EstadoOnboarding;
           break;
       }
     }
@@ -119,43 +125,30 @@ const Onboarding = () => {
 
   const renderStepContent = () => {
     if (data.isCorporate) {
-      // Flujo corporativo
+      // Flujo corporativo (7 pasos)
       switch (data.currentStep) {
         case 1:
           return <PersonalInfoForm data={data.personalInfo} onNext={handleNext} />;
         case 2:
           return <CorporateDetailsForm data={data.corporateDetails} onNext={handleNext} onBack={handleBack} />;
         case 3:
-          return <PEPForm data={data.pep} onNext={handleNext} onBack={handleBack} />;
+          // TODO: Crear componente combinado DeclaracionesForm
+          return <PEPForm data={data.pep} onNext={(pep) => handleNext({ pep })} onBack={handleBack} />;
         case 4:
-          return <OrigenFondosForm data={data.origenFondos} onNext={handleNext} onBack={handleBack} />;
+          // TODO: Crear componente combinado PerfilCompleto
+          return <PerfilInversionistaForm data={data.perfilInversionista} onNext={(perfilInversionista) => handleNext({ perfilInversionista })} onBack={handleBack} />;
         case 5:
-          return (
-            <FATCACRSForm
-              fatcaData={data.fatca}
-              crsData={data.crs}
-              onNext={(fatca, crs) => handleNext({ fatca, crs })}
-              onBack={handleBack}
-            />
-          );
+          return <DocumentosRespaldoForm data={data.documentos} onNext={handleNext} onBack={handleBack} isCorporate={true} />;
         case 6:
-          return (
-            <PerfilInversionistaForm
-              data={data.perfilInversionista}
-              onNext={handleNext}
-              onBack={handleBack}
-            />
-          );
+          return <RevisionForm data={data} onNext={handleNext} onBack={handleBack} />;
         case 7:
           return (
-            <InversionistaCalificadoForm
-              data={data.inversionistaCalificado}
-              onNext={handleNext}
-              onBack={handleBack}
+            <ResultadoOnboarding
+              estado={data.estadoFinal || 'pendiente'}
+              nombreCliente={data.corporateInfo?.razonSocial || ''}
+              email={data.corporateInfo?.email || data.personalInfo?.email || ''}
             />
           );
-        case 8:
-          return <RevisionYFirma data={data} onBack={handleBack} />;
         default:
           return (
             <div className="text-center py-12">
@@ -164,41 +157,28 @@ const Onboarding = () => {
           );
       }
     } else {
-      // Flujo natural
+      // Flujo natural (6 pasos)
       switch (data.currentStep) {
         case 1:
           return <PersonalInfoForm data={data.personalInfo} onNext={handleNext} />;
         case 2:
-          return <PEPForm data={data.pep} onNext={handleNext} onBack={handleBack} />;
+          // TODO: Crear componente combinado DeclaracionesForm
+          return <PEPForm data={data.pep} onNext={(pep) => handleNext({ pep })} onBack={handleBack} />;
         case 3:
-          return <OrigenFondosForm data={data.origenFondos} onNext={handleNext} onBack={handleBack} />;
+          // TODO: Crear componente combinado PerfilCompleto
+          return <PerfilInversionistaForm data={data.perfilInversionista} onNext={(perfilInversionista) => handleNext({ perfilInversionista })} onBack={handleBack} />;
         case 4:
-          return (
-            <FATCACRSForm
-              fatcaData={data.fatca}
-              crsData={data.crs}
-              onNext={(fatca, crs) => handleNext({ fatca, crs })}
-              onBack={handleBack}
-            />
-          );
+          return <DocumentosRespaldoForm data={data.documentos} onNext={handleNext} onBack={handleBack} isCorporate={false} />;
         case 5:
-          return (
-            <PerfilInversionistaForm
-              data={data.perfilInversionista}
-              onNext={handleNext}
-              onBack={handleBack}
-            />
-          );
+          return <RevisionForm data={data} onNext={handleNext} onBack={handleBack} />;
         case 6:
           return (
-            <InversionistaCalificadoForm
-              data={data.inversionistaCalificado}
-              onNext={handleNext}
-              onBack={handleBack}
+            <ResultadoOnboarding
+              estado={data.estadoFinal || 'pendiente'}
+              nombreCliente={data.personalInfo ? `${data.personalInfo.nombre} ${data.personalInfo.apellidoPaterno}` : ''}
+              email={data.personalInfo?.email || ''}
             />
           );
-        case 7:
-          return <RevisionYFirma data={data} onBack={handleBack} />;
         default:
           return (
             <div className="text-center py-12">
@@ -238,11 +218,10 @@ const Onboarding = () => {
               {data.currentStep === 1 && <UserCheck className="w-6 h-6 text-primary" />}
               {data.isCorporate && data.currentStep === 2 && <Building2 className="w-6 h-6 text-primary" />}
               {((!data.isCorporate && data.currentStep === 2) || (data.isCorporate && data.currentStep === 3)) && <FileCheck className="w-6 h-6 text-primary" />}
-              {((!data.isCorporate && data.currentStep === 3) || (data.isCorporate && data.currentStep === 4)) && <DollarSign className="w-6 h-6 text-primary" />}
-              {((!data.isCorporate && data.currentStep === 4) || (data.isCorporate && data.currentStep === 5)) && <Globe className="w-6 h-6 text-primary" />}
-              {((!data.isCorporate && data.currentStep === 5) || (data.isCorporate && data.currentStep === 6)) && <TrendingUp className="w-6 h-6 text-primary" />}
-              {((!data.isCorporate && data.currentStep === 6) || (data.isCorporate && data.currentStep === 7)) && <Crown className="w-6 h-6 text-primary" />}
-              {((!data.isCorporate && data.currentStep === 7) || (data.isCorporate && data.currentStep === 8)) && <FileSignature className="w-6 h-6 text-primary" />}
+              {((!data.isCorporate && data.currentStep === 3) || (data.isCorporate && data.currentStep === 4)) && <TrendingUp className="w-6 h-6 text-primary" />}
+              {((!data.isCorporate && data.currentStep === 4) || (data.isCorporate && data.currentStep === 5)) && <Upload className="w-6 h-6 text-primary" />}
+              {((!data.isCorporate && data.currentStep === 5) || (data.isCorporate && data.currentStep === 6)) && <FileSignature className="w-6 h-6 text-primary" />}
+              {((!data.isCorporate && data.currentStep === 6) || (data.isCorporate && data.currentStep === 7)) && <CheckCircle className="w-6 h-6 text-primary" />}
               <div>
                 <CardTitle className="text-2xl">{activeSteps[data.currentStep - 1]?.title}</CardTitle>
                 <CardDescription className="text-base mt-1">

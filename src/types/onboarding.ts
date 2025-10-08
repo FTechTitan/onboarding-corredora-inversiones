@@ -75,6 +75,20 @@ export interface InversionistaCalificado {
   certificacionProfesional?: boolean;
 }
 
+export interface DocumentoRespaldo {
+  nombre: string;
+  tipo: string;
+  tamaño: number;
+  archivo: File | null;
+  url?: string;
+}
+
+export interface DocumentosRespaldo {
+  documentos: DocumentoRespaldo[];
+}
+
+export type EstadoOnboarding = 'pendiente' | 'aprobado' | 'rechazado';
+
 export interface CorporateInfo {
   razonSocial: string;
   rutEmpresa: string;
@@ -143,7 +157,9 @@ export interface OnboardingData {
   crs?: CRSDeclaration;
   perfilInversionista?: PerfilInversionista;
   inversionistaCalificado?: InversionistaCalificado;
+  documentos?: DocumentosRespaldo;
   signature?: ElectronicSignature;
+  estadoFinal?: EstadoOnboarding;
   currentStep: number;
   completedSteps: number[];
   isCorporate?: boolean;

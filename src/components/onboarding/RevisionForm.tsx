@@ -1,66 +1,30 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import { OnboardingData, ElectronicSignature } from "@/types/onboarding";
+import { OnboardingData } from "@/types/onboarding";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileText, CheckCircle2, User, Shield, DollarSign, Globe, TrendingUp, Crown, Building2 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useToast } from "@/hooks/use-toast";
-import AdvancedElectronicSignature from "./AdvancedElectronicSignature";
+import { FileText, CheckCircle2, User, Shield, DollarSign, Globe, TrendingUp, Crown, Building2, Upload } from "lucide-react";
 
-interface RevisionYFirmaProps {
+interface RevisionFormProps {
   data: OnboardingData;
+  onNext: (estado: 'pendiente' | 'aprobado' | 'rechazado') => void;
   onBack: () => void;
 }
 
-const RevisionYFirma = ({ data, onBack }: RevisionYFirmaProps) => {
-  const navigate = useNavigate();
-  const { toast } = useToast();
+const RevisionForm = ({ data, onNext, onBack }: RevisionFormProps) => {
   const [aceptaTerminos, setAceptaTerminos] = useState(false);
-  const [firmando, setFirmando] = useState(false);
-  const [signatureCompleted, setSignatureCompleted] = useState(false);
-  const [signatureData, setSignatureData] = useState<ElectronicSignature | null>(null);
+  const [enviando, setEnviando] = useState(false);
 
-  const handleSignatureComplete = (signature: ElectronicSignature) => {
-    setSignatureData(signature);
-    setSignatureCompleted(true);
-  };
-
-  const handleFirmar = async () => {
-    if (!signatureCompleted) {
-      toast({
-        title: "Advertencia",
-        description: "No has completado la firma electrónica, pero puedes continuar",
-      });
-    }
-
-    if (!aceptaTerminos) {
-      toast({
-        title: "Advertencia",
-        description: "No has aceptado los términos, pero puedes continuar",
-      });
-    }
-
-    setFirmando(true);
+  const handleEnviar = async () => {
+    setEnviando(true);
     
-    // Simular proceso de firma y envío
+    // Simular validación automática
     setTimeout(() => {
-      toast({
-        title: "¡Proceso completado exitosamente!",
-        description: "Has completado el flujo de onboarding",
-      });
-      navigate("/success");
-    }, 1000);
-  };
-
-  const getSignerName = () => {
-    if (data.isCorporate && data.corporateInfo) {
-      return data.corporateInfo.razonSocial;
-    }
-    if (data.personalInfo) {
-      return `${data.personalInfo.nombre} ${data.personalInfo.apellidoPaterno} ${data.personalInfo.apellidoMaterno}`.trim();
-    }
-    return "Firmante";
+      // Lógica simple: si tiene todos los campos básicos, aprobar, sino pendiente
+      const tieneInfoCompleta = data.personalInfo && data.origenFondos && data.fatca && data.crs && data.documentos;
+      const estado = tieneInfoCompleta ? 'pendiente' : 'pendiente'; // Por ahora siempre pendiente
+      onNext(estado);
+    }, 1500);
   };
 
   const sections = data.isCorporate
@@ -112,6 +76,11 @@ const RevisionYFirma = ({ data, onBack }: RevisionYFirmaProps) => {
             data.perfilInversionista?.objetivoInversion,
             data.perfilInversionista?.toleranciaRiesgo,
           ].filter(Boolean),
+        },
+        {
+          icon: Upload,
+          title: "Documentos",
+          items: data.documentos?.documentos.map(doc => doc.nombre) || [],
         },
       ]
     : [
@@ -165,6 +134,11 @@ const RevisionYFirma = ({ data, onBack }: RevisionYFirmaProps) => {
               : "Inversionista General",
           ],
         },
+        {
+          icon: Upload,
+          title: "Documentos",
+          items: data.documentos?.documentos.map(doc => doc.nombre) || [],
+        },
       ];
 
   return (
@@ -195,13 +169,6 @@ const RevisionYFirma = ({ data, onBack }: RevisionYFirmaProps) => {
         })}
       </div>
 
-      <div className="mt-8">
-        <AdvancedElectronicSignature
-          onSignatureComplete={handleSignatureComplete}
-          signerName={getSignerName()}
-        />
-      </div>
-
       <div className="mt-6 p-6 border-2 border-primary/50 rounded-lg bg-gradient-card">
         <div className="flex items-center gap-3 mb-6">
           <FileText className="w-6 h-6 text-primary" />
@@ -220,34 +187,26 @@ const RevisionYFirma = ({ data, onBack }: RevisionYFirmaProps) => {
               <a href="#" className="text-primary hover:underline">
                 términos y condiciones
               </a>
-              . Declaro que toda la información proporcionada es veraz y completa. Comprendo que esta
-              firma electrónica avanzada tiene plena validez legal conforme a la Ley N° 19.799.
+              . Declaro que toda la información proporcionada es veraz y completa. Autorizo el uso
+              de mis datos personales según la Ley N° 19.628 de Protección de Datos.
             </label>
           </div>
 
           <div className="pt-4 border-t border-border">
-            {signatureData && (
-              <div className="mb-4 p-3 rounded-lg bg-primary/10 border border-primary/20">
-                <p className="text-sm text-primary flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4" />
-                  Firma electrónica capturada - Certificado: {signatureData.certificateId}
-                </p>
-              </div>
-            )}
             <Button
               size="lg"
-              onClick={handleFirmar}
-              disabled={firmando}
+              onClick={handleEnviar}
+              disabled={!aceptaTerminos || enviando}
               className="w-full md:w-auto min-w-[200px] text-lg py-6 shadow-glow"
             >
-              {firmando ? "Procesando..." : "Activar Cuenta"}
+              {enviando ? "Enviando solicitud..." : "Enviar Solicitud"}
             </Button>
           </div>
         </div>
       </div>
 
       <div className="flex justify-start pt-4">
-        <Button type="button" variant="outline" onClick={onBack} disabled={firmando}>
+        <Button type="button" variant="outline" onClick={onBack} disabled={enviando}>
           Atrás
         </Button>
       </div>
@@ -255,4 +214,4 @@ const RevisionYFirma = ({ data, onBack }: RevisionYFirmaProps) => {
   );
 };
 
-export default RevisionYFirma;
+export default RevisionForm;
