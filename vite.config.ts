@@ -11,12 +11,12 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   build: {
-    assetsDir: 'static', // Cambiar de 'assets' a 'static' para evitar reglas de firewall
+    assetsDir: 'app-resources', // Cambiar a path completamente nuevo para evitar historial de Zscaler
     rollupOptions: {
       output: {
-        assetFileNames: 'static/[name]-[hash][extname]',
-        chunkFileNames: 'static/[name]-[hash].js',
-        entryFileNames: 'static/[name]-[hash].js'
+        assetFileNames: 'app-resources/[name]-[hash][extname]',
+        chunkFileNames: 'app-resources/bundle-[hash].js',
+        entryFileNames: 'app-resources/bundle-[hash].js'
       }
     }
   },
