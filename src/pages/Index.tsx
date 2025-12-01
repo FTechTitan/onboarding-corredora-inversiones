@@ -1,33 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Shield, FileCheck, Clock, Lock, CheckCircle2, ArrowRight, Building2, User } from "lucide-react";
+import { Shield, CheckCircle2, ArrowRight, Building2, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Index = () => {
   const navigate = useNavigate();
-
-  const features = [
-    {
-      icon: Clock,
-      title: "Proceso Ágil",
-      description: "Complete su onboarding en minutos, desde cualquier dispositivo",
-    },
-    {
-      icon: Shield,
-      title: "Cumplimiento Normativo",
-      description: "100% conforme con UAF y CMF",
-    },
-    {
-      icon: Lock,
-      title: "Seguro y Encriptado",
-      description: "Sus datos están protegidos con los más altos estándares de seguridad",
-    },
-    {
-      icon: FileCheck,
-      title: "Firma Electrónica",
-      description: "Firme todos los documentos de forma digital y legalmente válida",
-    },
-  ];
 
   const steps = [
     "Información personal y KYC",
@@ -48,14 +25,12 @@ const Index = () => {
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
               <Shield className="w-4 h-4 text-primary" />
               <span className="text-sm font-medium text-primary">
-                Sistema Certificado UAF / CMF
+                Singular Onboarding
               </span>
             </div>
             
             <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
-              Onboarding Digital y
-              <br />
-              Debida Diligencia
+              Onboarding Digital
             </h1>
             
             <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
@@ -70,7 +45,7 @@ const Index = () => {
                 className="text-lg px-8 py-6 shadow-glow hover:shadow-xl transition-all duration-300 min-w-[240px]"
               >
                 <User className="mr-2 w-5 h-5" />
-                Cliente Personal
+                Persona Natural
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
 
@@ -81,40 +56,14 @@ const Index = () => {
                 className="text-lg px-8 py-6 border-primary/50 hover:bg-primary/10 transition-all duration-300 min-w-[240px]"
               >
                 <Building2 className="mr-2 w-5 h-5" />
-                Cliente Empresarial
+                Persona Jurídica
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Button>
             </div>
 
             <p className="mt-4 text-sm text-muted-foreground">
-              ⏱️ Tiempo estimado: 10-15 minutos (Personal) | 15-20 minutos (Empresarial)
+              ⏱️ Tiempo estimado: 10-15 minutos (Natural) | 15-20 minutos (Jurídica)
             </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Features Grid */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-4">¿Por qué nuestro sistema?</h2>
-          <p className="text-center text-muted-foreground mb-12 max-w-2xl mx-auto">
-            Solución integral para personas naturales y empresas
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {features.map((feature, index) => (
-              <Card
-                key={index}
-                className="border-border/50 bg-gradient-card hover:border-primary/50 transition-all duration-300 hover:shadow-card"
-              >
-                <CardContent className="pt-6">
-                  <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
-                    <feature.icon className="w-6 h-6 text-primary" />
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground">{feature.description}</p>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>
@@ -130,7 +79,7 @@ const Index = () => {
                   <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center">
                     <User className="w-7 h-7 text-primary" />
                   </div>
-                  <h3 className="text-2xl font-bold">Cliente Personal</h3>
+                  <h3 className="text-2xl font-bold">Persona Natural</h3>
                 </div>
                 <p className="text-muted-foreground mb-6">
                   Proceso optimizado para personas naturales que desean invertir de forma individual.
@@ -157,7 +106,7 @@ const Index = () => {
                   onClick={() => navigate("/onboarding")}
                   className="w-full shadow-glow"
                 >
-                  Comenzar como Personal
+                  Comenzar como Persona Natural
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </CardContent>
@@ -169,7 +118,7 @@ const Index = () => {
                   <div className="w-14 h-14 rounded-lg bg-primary/10 flex items-center justify-center">
                     <Building2 className="w-7 h-7 text-primary" />
                   </div>
-                  <h3 className="text-2xl font-bold">Cliente Empresarial</h3>
+                  <h3 className="text-2xl font-bold">Persona Jurídica</h3>
                 </div>
                 <p className="text-muted-foreground mb-6">
                   Solución completa para empresas y personas jurídicas con gestión de múltiples representantes.
@@ -197,7 +146,7 @@ const Index = () => {
                   onClick={() => navigate("/corporate-pre-enrollment")}
                   className="w-full border-primary/50 hover:bg-primary/10"
                 >
-                  Comenzar como Empresa
+                  Comenzar como Persona Jurídica
                   <ArrowRight className="ml-2 w-4 h-4" />
                 </Button>
               </CardContent>
