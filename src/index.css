@@ -8,78 +8,78 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Brand Colors - Financial Onboarding System */
-    --background: 210 25% 12%; /* #1A2633 - Deep navy blue */
-    --foreground: 210 25% 96%; /* #F0F4F8 - Off white */
+    /* Brand Colors - Singular Institutional */
+    --background: 216 30% 13%; /* #171f2b - Singular dark blue */
+    --foreground: 210 25% 96%; /* Off white */
 
-    --card: 210 25% 15%;
+    --card: 216 28% 16%;
     --card-foreground: 210 25% 96%;
 
-    --popover: 210 25% 14%;
+    --popover: 216 28% 15%;
     --popover-foreground: 210 25% 96%;
 
-    --primary: 142 100% 80%; /* #99FFB4 - Mint green */
-    --primary-foreground: 210 25% 12%;
+    --primary: 155 100% 45%; /* #00e586 - Singular green */
+    --primary-foreground: 216 30% 13%;
 
-    --secondary: 210 25% 20%;
+    --secondary: 216 28% 20%;
     --secondary-foreground: 210 25% 96%;
 
-    --muted: 210 25% 18%;
-    --muted-foreground: 210 15% 65%;
+    --muted: 216 28% 18%;
+    --muted-foreground: 216 15% 65%;
 
-    --accent: 142 100% 80%;
-    --accent-foreground: 210 25% 12%;
+    --accent: 155 100% 45%; /* #00e586 */
+    --accent-foreground: 216 30% 13%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 25% 96%;
 
-    --border: 210 20% 25%;
-    --input: 210 20% 20%;
-    --ring: 142 100% 80%;
+    --border: 216 25% 25%;
+    --input: 216 25% 20%;
+    --ring: 155 100% 45%;
 
     --radius: 0.75rem;
 
     /* Gradients */
-    --gradient-primary: linear-gradient(135deg, hsl(142 100% 70%), hsl(142 100% 85%));
-    --gradient-background: linear-gradient(180deg, hsl(210 25% 12%), hsl(210 25% 8%));
-    --gradient-card: linear-gradient(135deg, hsl(210 25% 15%), hsl(210 25% 18%));
+    --gradient-primary: linear-gradient(135deg, hsl(155 100% 40%), hsl(155 100% 50%));
+    --gradient-background: linear-gradient(180deg, hsl(216 30% 13%), hsl(216 30% 9%));
+    --gradient-card: linear-gradient(135deg, hsl(216 28% 16%), hsl(216 28% 19%));
 
     /* Shadows */
-    --shadow-glow: 0 0 30px hsl(142 100% 80% / 0.2);
-    --shadow-card: 0 10px 40px -10px hsl(210 25% 5% / 0.5);
+    --shadow-glow: 0 0 30px hsl(155 100% 45% / 0.2);
+    --shadow-card: 0 10px 40px -10px hsl(216 30% 5% / 0.5);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   .dark {
-    --background: 210 25% 12%;
+    --background: 216 30% 13%;
     --foreground: 210 25% 96%;
 
-    --card: 210 25% 15%;
+    --card: 216 28% 16%;
     --card-foreground: 210 25% 96%;
 
-    --popover: 210 25% 14%;
+    --popover: 216 28% 15%;
     --popover-foreground: 210 25% 96%;
 
-    --primary: 142 100% 80%;
-    --primary-foreground: 210 25% 12%;
+    --primary: 155 100% 45%;
+    --primary-foreground: 216 30% 13%;
 
-    --secondary: 210 25% 20%;
+    --secondary: 216 28% 20%;
     --secondary-foreground: 210 25% 96%;
 
-    --muted: 210 25% 18%;
-    --muted-foreground: 210 15% 65%;
+    --muted: 216 28% 18%;
+    --muted-foreground: 216 15% 65%;
 
-    --accent: 142 100% 80%;
-    --accent-foreground: 210 25% 12%;
+    --accent: 155 100% 45%;
+    --accent-foreground: 216 30% 13%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 25% 96%;
 
-    --border: 210 20% 25%;
-    --input: 210 20% 20%;
-    --ring: 142 100% 80%;
+    --border: 216 25% 25%;
+    --input: 216 25% 20%;
+    --ring: 155 100% 45%;
   }
 }
 
