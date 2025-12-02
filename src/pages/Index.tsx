@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Shield, CheckCircle2, ArrowRight, Building2, User } from "lucide-react";
+import { CheckCircle2, ArrowRight, Building2, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import singularLogo from "@/assets/singular-logo.png";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -17,13 +18,19 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-secondary/30">
+      {/* Header */}
+      <header className="py-6 px-4 sm:px-6 lg:px-8 border-b border-border/30">
+        <div className="max-w-7xl mx-auto flex items-center justify-center">
+          <img src={singularLogo} alt="Singular" className="h-10 sm:h-12" />
+        </div>
+      </header>
+
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-primary/5" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative">
           <div className="text-center max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
-              <Shield className="w-4 h-4 text-primary" />
               <span className="text-sm font-medium text-primary">
                 Singular Onboarding
               </span>
